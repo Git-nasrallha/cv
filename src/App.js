@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{useState,useContext} from "react";
+import {BrowserRouter} from "react-router-dom";
+import Navbar from './components/navbar/Navbar';
+import Main from "./components/main/Main";
+import { AppContext } from "./contextApi/AppContext";
+import LoadingPage from "./components/LoadingPage";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const {loading}=useContext(AppContext);
+  const [toggleSideBar,setToggleSideBar]=useState(false);
+  const [classToggle,setClassToggle]=useState("");
+ const toggleSideBarAction=()=>{
+    setToggleSideBar(!toggleSideBar);
+    if(toggleSideBar===true){
+      setClassToggle("");
+    }else{
+      setClassToggle("active");
+    }
+  }
+
+  if(loading){
+    return <LoadingPage/>
+  }else{
+
+    return (
+      <BrowserRouter>
+        <div className="App">
+      
+          <Navbar show={classToggle} />
+          <Main toggle={toggleSideBar} show={classToggle} toggleAction={toggleSideBarAction} />
+          
+        </div>
+      </BrowserRouter>
+    );
+  }
 }
 
 export default App;
